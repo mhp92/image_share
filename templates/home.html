@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content_header %}
+	<h1 class="text-center">Home</h1>
+{% endblock %}
+{% block content %}
+
+
+	{% for user in users %}
+	<p><img class="rounded-circle account-img" src="{{ user.profile.image.url }}" style="height:30px; width:30px"> {{ user }}</p>
+
+	{% endfor %}
+
+
+
+{% endblock %}

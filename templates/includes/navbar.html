@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		<a class="navbar-brand" href="{% url 'home' %}">ImageShare</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+  	<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+  		<div class="navbar-nav">
+	      <a class="nav-item nav-link active" href="{% url 'home' %}">Home<span class="sr-only">(current)</span></a>
+	      <a class="nav-item nav-link active" href="{% url 'upload_img:upload' %}">Upload</a>
+        <a class="nav-item nav-link active" href="{% url 'upload_img:newsfeed' %}">Newsfeed</a>
+        <a class="nav-item nav-link" href="{% url 'classbasedview:upload' %}">CBV Upload</a>
+        <a class="nav-item nav-link" href="{% url 'classbasedview:newsfeed' %}">CBV Newsfeed</a>
+	   </div>
+       <div class="navbar-nav ml-auto">
+        {% if request.user.is_authenticated %}
+        <img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}" style="height:30px; width:30px">
+        <a class="nav-item nav-link active" href="{% url 'accounts:profile_detail' request.user.id %}">{{request.user}}</a>
+        <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">Sign out</a>
+        {% else %}
+        <a class="nav-item nav-link" href="{% url 'accounts:register' %}">Sign Up</a>
+        <a class="nav-item nav-link" href="{% url 'accounts:login' %}">Sign In</a>
+        {% endif %}
+        
+       </div>
+		</div>
+</nav>

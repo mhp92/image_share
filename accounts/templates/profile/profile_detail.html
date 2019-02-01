@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content_header %}
+	<h1 class="text-center">Your Profile</h1>
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Success Message -->
+
+	{% if messages %}
+				
+	    {% for message in messages %}
+	    <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+	    {{ message }}
+	    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	    
+	    {% endfor %}
+				
+	{% endif %}
+
+<!-- Profile Header -->
+
+<div class="content-section">
+	{% if request.user == user %}
+		<p>
+			<a href="{% url 'accounts:edit_profile' user.id %}" class="btn btn-primary">Edit</a>
+		</p>
+	{% endif %}
+		<div class="media">
+			<img class="rounded-circle account-img" src="{{ user.profile.image.url }}" style="height:60px; width:60px">
+			<div class="media-body">
+				<h5 class="account-heading">{{ user }}</h5>
+				<p class="text-secondary">{{ user.email }} | {{ user.first_name }} {{ user.last_name }}</p>
+			</div>
+		</div>
+
+<!-- Profile related Posts/Images -->
+		{% include 'includes/feed.html' %}
+		
+
+	
+
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content_header %}
+<h2>Upload image</h2>
+{% endblock %}
+{% block content %}
+<!-- ---------related to views.py Vitor Freitas part2------------ -->
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button type="submit" class="btn btn-primary">Upload Image</button>
+</form>
+
+
+{% endblock %}
+
+
+

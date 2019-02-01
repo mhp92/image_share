@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+	<h3>Delete Post? {{ image.title }}</h3>
+
+	<img src="{{ image.image.url }}" alt="{{ image.title }}" style="height:200px;">
+
+	<p>
+		<form method="post" action="{% url 'upload_img:delete' image.id %}">
+			{% csrf_token %}
+			<a href="{% url 'accounts:profile_detail' image.owner.id %}" class="btn btn-primary">Cancel</a>
+			<button type="submit" class="btn btn-danger">Delete</button>
+		</form>
+	</p>
+
+	
+
+{% endblock %}

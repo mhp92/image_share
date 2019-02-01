@@ -1,0 +1,112 @@
+
+{% load crispy_forms_tags %}
+<ul class="list-group">
+	{% for image in images_temp %}
+		<li class="list-group-item">
+
+			<div>
+				<p>
+				<a href="{% url 'accounts:profile_detail' image.owner.id %}">
+				<img class="rounded-circle account-img" src="{{ image.owner.profile.image.url }}" style="height:30px; width:30px">
+				{{ image.owner }}
+				</a>
+				</p>
+			</div>
+
+
+			<p>
+				<a href="{{ image.image.url }}" class="btn btn-primary btn-sm">original size</a>
+				<!-- Delete Button -->
+				{% if request.user == image.owner %}
+				<a href="{% url 'upload_img:delete_image' image.id %}"class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
+				{% endif %}
+			</p>
+			
+			
+			<a href="{% url 'upload_img:detail' image.id %}">
+				<img class="text-center" src="{{ image.image.url }}" style="max-width: 300px">
+			</a>
+			<p><strong>{{ image.title }}</strong></p>
+		
+
+			<!-- comments -->
+			
+			
+
+
+			<div class="main-content-section">
+				{{ image.comment_set.count }} Comment{{ Comments|pluralize }}
+				{% for comment in image.comment_set.comments_only %}
+
+					<blockquote>
+						<a href="{% url 'accounts:profile_detail' comment.owner.id %}"><img class="rounded-circle account-img" src="{{ comment.owner.profile.image.url }}" style="height:30px; width:30px">
+						<strong>{{ comment.owner}}</strong></a> {{ comment.text }} 
+						
+						<!-- delete comment btn -->
+						{% if request.user == comment.owner %}
+						<a href="{% url 'upload_img:delete_comment' comment.id %}"class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+						{% endif %}
+					</blockquote>
+					<blockquote>
+						<!-- "replies" comes from Comment models reply attribute => related_name="replies" -->
+						{% for reply in comment.replies.all %} 
+							<p>
+							<a class="ml-4" href="{% url 'accounts:profile_detail' reply.owner.id %}"><img class="rounded-circle account-img" src="{{ reply.owner.profile.image.url }}" style="height:25px; width:25px">
+							{{ reply.owner}}</a> {{ reply.text }} 
+							{% if request.user == reply.owner %}
+							<a href="{% url 'upload_img:delete_comment' reply.id %}"class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+							</p>
+							{% endif %}
+						{% endfor %}
+					</blockquote>
+					
+
+
+
+					<!-- comment replies -->
+
+					<div class="replied-comments container mt-2">
+						<div class="form-group row">
+							<form class="form-inline" method="post" enctype="multipart/form-data">
+								<input type="hidden" name="image_r_id" value="{{ image.pk }}">
+								<input type="hidden" name="comment_id" value="{{ comment.pk }}">
+								{% csrf_token %}
+								<a href="{% url 'accounts:profile_detail' comment.owner.id %}"><img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}" style="height:30px; width:30px"></a>
+								{{ c_form|crispy }}
+
+								<!-- reply button -->
+								<button type="submit" class="btn btn-light"><i class="fas fa-reply"></i></button>
+							</form>
+						</div>
+					</div>
+						
+
+						
+				{% endfor %}
+			
+			</div>
+
+
+
+
+			
+			<!-- end -->
+			
+			<div class="container-fluid">
+				<div class="form-group row">
+					<form class="form-inline" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="image_id" value="{{ image.pk }}">
+						{% csrf_token %}
+						<a href="{% url 'accounts:profile_detail' request.user.id %}"><img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}" style="height:30px; width:30px"></a>
+						{{ c_form|crispy }}
+						<button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+					</form>
+				</div>
+			</div>
+	
+			<p>{{ image.pub_date|timesince }} ago</p>
+
+		</li>
+
+	{% endfor %}
+</ul>

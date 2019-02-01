@@ -1,0 +1,39 @@
+Backup
+			<div class="main-content-section">
+				{% for comment in image.comment_set.all %}
+
+					<div>
+						
+						
+						<a href="{% url 'accounts:profile_detail' comment.owner.id %}"><img class="rounded-circle account-img" src="{{ comment.owner.profile.image.url }}" style="height:30px; width:30px">
+						<strong>{{ comment.owner}}</strong></a> {{ comment.text }} 
+
+						<!-- delete comment btn -->
+						{% if request.user == comment.owner %}
+						<a href="{% url 'upload_img:delete_comment' comment.id %}"class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+						{% endif %}
+
+						</p>
+					</div>
+					<!-- comment replies -->
+						<div class="container-fluid mt-2">
+							<div class="replied-comments container">
+								<div class="form-group row">
+									<form class="form-inline" method="post" enctype="multipart/form-data">
+										<input type="hidden" name="image_r" value="{{ image.pk }}">
+										<input type="hidden" name="comment" value="{{ comment.pk }}">
+										{% csrf_token %}
+										<a href="{% url 'accounts:profile_detail' comment.owner.id %}"><img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}" style="height:30px; width:30px"></a>
+										{{ r_form|crispy }}
+
+										<!-- reply button -->
+										<button type="submit" class="btn btn-light"><i class="fas fa-reply"></i></button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						
+				{% endfor %}
+			
+			</div>
